@@ -77,6 +77,7 @@
 
 ## 5. Методические материалы
 
+- Лекционные материалы для обучающихся — [`lectures/`](lectures/README.md).
 - Обучающимся — [`methodical-guidelines/students/`](methodical-guidelines/students/README.md).
 - Преподавателям (оценивание) — [`methodical-guidelines/teachers-assessment/`](methodical-guidelines/teachers-assessment/README.md).
 - Преподавателям (ресурсы) — [`methodical-guidelines/teachers-resources/`](methodical-guidelines/teachers-resources/README.md).
@@ -101,6 +102,7 @@ data-structures-and-algorithms/
 ├── scripts/                         (генерация данных, проверка ссылок и структуры)
 ├── tests/                           (smoke-тесты окружения)
 ├── docs/                            (РПД, воспроизводимость, верификация ИИ-решений)
+├── lectures/                        (лекционные материалы)
 ├── M1-intro-and-basic-structures/   (ЛР 1–2 + рубрики + заготовки)
 ├── M2-sorting/                      (ЛР 3–4 + рубрики + заготовки)
 ├── M3-trees/                        (ЛР 5 + рубрика + заготовка)
