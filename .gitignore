@@ -1,0 +1,26 @@
+# Операционные системы / редакторы
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Временные файлы офисных приложений
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.tmp
+
+# Локальный отчёт проверки репозитория
+validation-report.txt
+
+# Локально генерируемые данные (scripts/generate_data.py)
+data/generated/

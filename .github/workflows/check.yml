@@ -1,0 +1,38 @@
+# Проверка Markdown-ссылок и структуры ФОС.
+# Внутренние ссылки, якоря и структура — блокирующие;
+# внешние http(s)-ссылки — неблокирующие (чужие сайты могут отдавать 403/429 ботам).
+name: check
+
+on: [push, pull_request]
+
+jobs:
+  links-and-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Внутренние ссылки, якоря и структура
+        run: python scripts/check_links.py
+
+      - name: Внешние ссылки (неблокирующе)
+        run: python scripts/check_links.py --only-external
+        continue-on-error: true
+
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Установка окружения
+        run: pip install -r requirements.txt
+
+      - name: Smoke-тесты окружения и генераторов данных
+        run: pytest tests/ -q
