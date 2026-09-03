@@ -117,6 +117,31 @@ def test_embeddings_ground_truth_ids_exist(tmp_path: Path) -> None:
         assert set(vacancies) <= vacancy_ids
 
 
+def test_manifest_records_variant_and_merges_sets(tmp_path: Path) -> None:
+    """manifest.json хранит вариант и накапливает наборы; смена варианта его обнуляет."""
+    arrays = gd.generate_arrays(tmp_path, SEED, sizes=(100,))
+    gd.write_manifest(tmp_path, 7, SEED, ["arrays"], arrays)
+    manifest = json.loads((tmp_path / gd.MANIFEST_NAME).read_text(encoding="utf-8"))
+    assert manifest["variant"] == 7
+    assert manifest["seed"] == SEED
+    assert manifest["sets"] == ["arrays"]
+    assert "arrays_random_100.txt" in manifest["files"]
+
+    # тот же вариант, другой набор — сведения накапливаются
+    pairs = gd.generate_pairs(tmp_path, SEED, n_keys=50)
+    gd.write_manifest(tmp_path, 7, SEED, ["pairs"], pairs)
+    manifest = json.loads((tmp_path / gd.MANIFEST_NAME).read_text(encoding="utf-8"))
+    assert manifest["sets"] == ["arrays", "pairs"]
+    assert {"arrays_random_100.txt", "pairs_keys.txt"} <= set(manifest["files"])
+
+    # другой вариант — манифест начинается заново
+    gd.write_manifest(tmp_path, 8, SEED + 1, ["pairs"], pairs)
+    manifest = json.loads((tmp_path / gd.MANIFEST_NAME).read_text(encoding="utf-8"))
+    assert manifest["variant"] == 8
+    assert manifest["sets"] == ["pairs"]
+    assert "arrays_random_100.txt" not in manifest["files"]
+
+
 def test_patterns_occur_in_texts(tmp_path: Path) -> None:
     """Каждый шаблон из patterns.txt встречается в своём тексте."""
     gd.generate_texts(tmp_path, SEED, **SMALL_TEXTS)

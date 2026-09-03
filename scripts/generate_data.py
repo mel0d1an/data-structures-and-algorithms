@@ -342,6 +342,43 @@ GENERATORS = {
     "embeddings": generate_embeddings,
 }
 
+MANIFEST_NAME = "manifest.json"
+
+
+def write_manifest(out_dir: Path, variant: int, seed: int,
+                   sets_done: list[str], created: list[Path]) -> Path:
+    """Записать/обновить manifest.json — паспорт сгенерированных данных.
+
+    Манифест позволяет заготовкам лабораторных проверить, что данные в каталоге
+    действительно относятся к заявленному варианту (см. lab01-complexity-starter.py).
+    При повторном запуске с другим --only сведения о наборах накапливаются;
+    смена варианта обнуляет манифест. Временных меток в файле нет: при одном
+    варианте манифест, как и данные, совпадает побайтно.
+    """
+    path = out_dir / MANIFEST_NAME
+    previous: dict = {}
+    if path.is_file():
+        try:
+            previous = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            previous = {}
+    if previous.get("variant") != variant:
+        previous = {}  # каталог принадлежал другому варианту — начинаем заново
+
+    sets_all = sorted(set(previous.get("sets", [])) | set(sets_done))
+    files_all = sorted(set(previous.get("files", []))
+                       | {p.name for p in created})
+    manifest = {
+        "variant": variant,
+        "seed": seed,
+        "base_seed": BASE_SEED,
+        "sets": sets_all,
+        "files": files_all,
+    }
+    path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8")
+    return path
+
 
 def main() -> None:
     ap = argparse.ArgumentParser(
@@ -364,11 +401,13 @@ def main() -> None:
     created: list[Path] = []
     for name in names:
         created.extend(GENERATORS[name](out_dir, seed))
+    manifest_path = write_manifest(out_dir, args.variant, seed, names, created)
 
     print(f"Вариант {args.variant} (seed={seed}), каталог {out_dir}; "
           f"создано файлов: {len(created)}")
     for path in created:
         print(f"  {path}")
+    print(f"Паспорт данных: {manifest_path}")
 
 
 if __name__ == "__main__":
