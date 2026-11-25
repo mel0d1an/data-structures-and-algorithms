@@ -9,8 +9,8 @@
 | 3 | Базовые сортировки и быстрая сортировка | [lecture-03-simple-sorts-quicksort.md](lecture-03-simple-sorts-quicksort.md) | 2 |
 | 4 | Слияние, линейные сортировки и куча | [lecture-04-mergesort-linear-heapsort.md](lecture-04-mergesort-linear-heapsort.md) | 2 |
 | 5 | Бинарные деревья поиска и AVL-деревья | [lecture-05-bst-avl.md](lecture-05-bst-avl.md) | 3 |
-| 6 | Поиск в линейных структурах | — | 4 |
-| 7 | Поиск подстрок | — | 4 |
+| 6 | Поиск в линейных структурах | [lecture-06-search-linear-structures.md](lecture-06-search-linear-structures.md) | 4 |
+| 7 | Поиск подстрок | [lecture-07-substring-search.md](lecture-07-substring-search.md) | 4 |
 | 8 | Хеш-таблицы | — | 4 |
 
 Тематика лекций — по [`docs/rpd.md`](../docs/rpd.md).
